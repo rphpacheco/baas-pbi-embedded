@@ -32,6 +32,15 @@ functions:
     environment:
       AUTHORITY_URL: https://login.microsoftonline.com/common/v2.0
       SCOPE_URL: https://analysis.windows.net/powerbi/api
+  RefreshTokenApp:
+    handler: handler.refreshTokenApp
+    events:
+      - http:
+          path: /refresh-token-app
+          method: post
+          cors: true
+    environment:
+      AUTHORITY_URL: https://login.microsoftonline.com/common/v2.0
   GetGroups:
     handler: handler.getGroups
     events:

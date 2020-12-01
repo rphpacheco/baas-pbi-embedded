@@ -2,7 +2,7 @@ const getTokenApp = async event => {
   const adal = require("adal-node")
   const AuthenticationContext = adal.AuthenticationContext
 
-  const { getAccessToken } = require('./src/services/getTokenApp')
+  const { getAccessToken } = require('./src/services/AcquireTokenServices')
 
   const { client_id, username, password } = JSON.parse(event.body)
 
@@ -16,6 +16,35 @@ const getTokenApp = async event => {
   }
 
   const token = await getAccessToken(context, config)
+
+  return {
+    statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Headers" : "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+    },
+    body: JSON.stringify(token),
+  };
+};
+
+const refreshTokenApp = async event => {
+  const adal = require("adal-node")
+  const AuthenticationContext = adal.AuthenticationContext
+
+  const { refreshAccessToken } = require('./src/services/AcquireTokenServices')
+
+  const { refresh_token, client_id, resource } = JSON.parse(event.body)
+
+  const context = new AuthenticationContext(process.env.AUTHORITY_URL)
+
+  const config = {
+    refreshToken: refresh_token, 
+    clientId: client_id, 
+    resource
+  }
+
+  const token = await refreshAccessToken(context, config)
 
   return {
     statusCode: 200,
@@ -92,6 +121,7 @@ const getStatusCode = (msg) => {
 
 module.exports = {
   getTokenApp,
+  refreshTokenApp,
   getGroups,
   getReports
 }
