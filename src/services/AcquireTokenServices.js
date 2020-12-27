@@ -1,3 +1,18 @@
+const acquireAccessToken = async(context, config) => 
+    new Promise(
+      (resolve, reject) => {
+          context.acquireToken(config.resource, config.userId, config.clientId, function (err, tokenResponse) {
+
+              // Function returns error object in tokenResponse
+              // Invalid Username will return empty tokenResponse, thus err is used
+              if (err) {
+                  reject(tokenResponse == null ? err : tokenResponse);
+              }
+              resolve(tokenResponse);
+          })
+      }
+    )
+
 const getAccessToken = async(context, config) => 
     new Promise(
       (resolve, reject) => {
@@ -27,4 +42,4 @@ const refreshAccessToken = async (context, config) =>
         }
     )
 
-module.exports = { getAccessToken, refreshAccessToken }
+module.exports = { acquireAccessToken, getAccessToken, refreshAccessToken }

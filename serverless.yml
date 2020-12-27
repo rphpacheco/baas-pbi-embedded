@@ -22,6 +22,16 @@ provider:
   region: us-east-1
 
 functions:
+  AcquireTokenApp:
+    handler: handler.acquireTokenApp
+    events:
+      - http:
+          path: /acquire-token-app
+          method: post
+          cors: true
+    environment:
+      AUTHORITY_URL: https://login.microsoftonline.com/common/v2.0
+      SCOPE_URL: https://analysis.windows.net/powerbi/api
   GetTokenApp:
     handler: handler.getTokenApp
     events:
@@ -55,6 +65,15 @@ functions:
     events:
       - http:
           path: /reports
+          method: post
+          cors: true
+    environment:
+      BASE_URL: https://api.powerbi.com/v1.0/myorg/groups
+  GetReportToken:
+    handler: handler.getReportToken
+    events:
+      - http:
+          path: /report-token
           method: post
           cors: true
     environment:
